@@ -1,0 +1,79 @@
+//============================================================================
+// Name        : vod_api_base.proto
+// Description : API to interact with VOD Module
+// Author      : Akshay Gupta
+//============================================================================
+
+syntax = "proto3";
+
+package VODService;
+
+service VODService {
+    rpc StartVOD (VODStartMessage) returns (VODStartResponse) {
+    }
+
+    rpc StopVOD (VODStopMessage) returns (VODStopResponse) {
+    }
+
+    rpc CheckVODStatus (VODStatusMessage) returns (VODStatusResponse) {
+    }
+
+    rpc HealthCheck (HealthCheckMessage) returns (HealthCheckResult) {
+    }
+}
+
+enum DType {
+    UINT8 = 0;
+    UINT16 = 1;
+    FLOAT32 = 2;
+    FLOAT64 = 3;
+}
+
+message HealthCheckMessage{
+    repeated RtspUrlMessage rtsp_urls = 1;
+}
+
+message RtspUrlMessage{
+    string rtsp_url = 1;
+}
+
+message RTSPFeedHealthCheck{
+    bool status_flag = 1;
+    string status_message = 2;
+}
+
+message HealthCheckResult{
+    bool success = 1;
+    string status_message = 2;
+    repeated RTSPFeedHealthCheck feeds =3; // Each feed will have a separate health check
+}
+
+message VODStartMessage{
+    string stream_name = 1;
+    string rtsp_url = 2;
+}
+
+message VODStopMessage{
+    string rtsp_url = 1;
+}
+
+message VODStartResponse {
+    bool success = 1;
+    string status_message = 2;
+}
+
+message VODStatusMessage {
+    string stream_name = 1;
+}
+
+message VODStatusResponse {
+    bool success = 1;
+    string status_message = 2;
+    bool stream_running = 3;
+    string stream_log = 4;
+}
+
+message VODStopResponse {
+    bool success = 1;
+    string status_message = 2;
+}

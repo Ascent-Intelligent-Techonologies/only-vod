@@ -1,0 +1,27 @@
+version : '3.3'
+
+services:
+  
+    edgeadmin-server:
+        build:
+            context: ./
+            dockerfile: ./docker/Dockerfile
+            args:
+                - BASE_IMG=${BASE_IMAGE}
+        image: camonitor-edge:edgeadmin-api
+        network_mode: host
+        restart: on-failure
+        ipc: host
+        deploy:
+            replicas: 1
+        environment:
+            - PRJ_HOME=${PRJ_HOME}
+            - PRJ_PATH=${PRJ_PATH}
+            - SERVER_PORT=${SERVER_PORT}
+            - SERVER_ADDRESS=${SERVER_ADDRESS}
+            - SQL_BASE_URL=${SQL_BASE_URL}
+        volumes:
+            - ${PRJ_HOME}:${PRJ_PATH}
+        command: /bin/bash -c "
+                    source ~/.bashrc
+                    && source /home/data/scripts/run_server.sh"

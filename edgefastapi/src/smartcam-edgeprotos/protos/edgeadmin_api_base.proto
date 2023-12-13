@@ -1,0 +1,41 @@
+//============================================================================
+// Name        : edgeadmin_api_base.proto
+// Description : API to interact with VideoSave Module
+// Author      : Harsha v
+//============================================================================
+
+
+syntax = "proto3";
+import "google/protobuf/empty.proto";
+package EdgeAdminService;
+
+service EdgeAdminService {
+    rpc RTSPHealthCheck (ListRtspUrl) returns (RTSPHealthCheckResult) {
+    }
+    rpc GetRtspUrl (GetRtspUrlMessage) returns (ListRtspUrl){
+    }
+}
+
+
+message ListRtspUrl{
+    repeated RtspUrlMessage rtsp_urls = 1;
+}
+
+message GetRtspUrlMessage{
+    string device_id = 1;
+}
+
+message RtspUrlMessage{
+    string rtsp_url = 1;
+}
+
+message RTSPFeedHealthCheck{
+    bool status_flag = 1;
+    string status_message = 2;
+}
+
+message RTSPHealthCheckResult{
+    bool success = 1;
+    string status_message = 2; 
+    repeated RTSPFeedHealthCheck feeds = 3; // Each feed will have a separate health check
+}

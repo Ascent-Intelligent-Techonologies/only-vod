@@ -1,0 +1,51 @@
+//============================================================================
+// Name        : camera_api_base.proto
+// Description : API to interact with Camera Device
+//============================================================================
+
+syntax = "proto3";
+
+package CameraService;
+import "google/protobuf/empty.proto";
+
+service CameraService {
+    rpc GetData (google.protobuf.Empty) returns (DataResult) {
+    }
+
+    rpc GetCameraInfo (google.protobuf.Empty) returns (CameraInfoResult) {
+    }
+
+    rpc HealthCheck (google.protobuf.Empty) returns (HealthCheckResult) {
+    }
+}
+
+enum DType {
+    UINT8 = 0;
+    UINT16 = 1;
+    FLOAT32 = 2;
+    FLOAT64 = 3;
+}
+
+message HealthCheckResult{
+    bool status_flag = 1;
+    string status_message = 2;
+}
+
+message Image {
+    bytes img = 1;
+    int32 img_height = 2;
+    int32 img_width = 3;
+    DType img_dtype = 4;
+    int32 img_channels = 5;
+}
+
+message DataResult {
+    Image rgb = 1;
+}
+
+message CameraInfoResult {
+    int32 height = 1;
+    int32 width = 2;
+    int32 channels = 3;
+    DType dtype = 4;
+}

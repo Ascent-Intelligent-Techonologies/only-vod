@@ -1,0 +1,52 @@
+<html>
+<head>
+    <title>Camera Registration page</title>
+    
+</head>
+<body>
+    
+</body>
+</html>
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Camera Registration Page</title>
+    <link href="{{ url_for('static', path='/styles.css') }}" rel="stylesheet">
+</head>
+<body>
+    <h1>Camera Registration Page for Device ID: {{ device_id }}</h1>
+    <form action="/register_camera" method="post" enctype="multipart/form-data" autocomplet="on">
+        <label for="device_id">Enter Device_ID : </label>
+        <input type="text" id="device_id" name="device_id" value={{ device_id }}>
+        <label for="rtsp_url">Enter RTSP URL : </label>
+        <input type="text" id="rtsp_url" name="rtsp_url">
+        <label for="cameraname">Enter Camera Name : </label>
+        <input type="text" id="cameraname" name="cameraname">
+        <label for="area">Enter area where camera is located : </label>
+        <select id="area" name="area">
+            <option value="class">class</option>
+            <option value="outdoor">outdoor</option>
+            <option value="bus">bus</option>
+          </select>
+        <label for="location">Enter location : </label>
+        <input type="text" id="location" name="location">
+        <label for="district">Enter district : </label>
+        <input type="text" id="district" name="district">
+        <label for="city">Enter city : </label>
+        <input type="text" id="city" name="city">
+        <label for="pincode">Enter pincode : </label>
+        <input type="text" id="pincode" name="pincode">
+        <label for="state">Enter state : </label>
+        <input type="text" id="state" name="state">
+        <label for="class_name">Enter class_name : </label>
+        <input type="text" id="class_name" name="class_name">
+    
+        <input class="submit" type="submit" value="Submit">
+    </form>
+</body>
+</html>

@@ -1,0 +1,42 @@
+//============================================================================
+// Name        : edgeadmin_api_base.proto
+// Description : API to interact with VideoSave Module
+// Author      : Harsha v
+//============================================================================
+
+
+syntax = "proto3";
+import "google/protobuf/empty.proto";
+package InferenceService;
+
+service InferenceService {
+    // basic rpc to check if the service is up and running
+    rpc StatusCheck (StatusCheckRequest) returns (StatusCheckResponse) {
+    }
+
+    // rpc to start inference using input in in_confif.yaml file
+    rpc StartInference (google.protobuf.Empty) returns (StartInferenceResponse) {
+    }
+
+    // rpc to stop inference 
+    rpc StopInference (google.protobuf.Empty) returns (StartInferenceResponse) {
+    }
+
+    // rpc to alert a update in the shared in in_config.yaml 
+    rpc ConfigUpdateAlert (google.protobuf.Empty) returns (google.protobuf.Empty) {
+    } 
+    
+}
+
+message StartInferenceResponse{
+    bool success = 1;
+    string status_message = 2;
+}
+message StatusCheckRequest{  
+}
+
+message StatusCheckResponse{
+    bool status = 1;
+    string status_message = 2;
+}
+

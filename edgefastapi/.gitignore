@@ -1,0 +1,4 @@
+.env*
+env.sh
+__pycache__
+src/config/*.json

@@ -1,0 +1,26 @@
+# Project Camonitor
+# Description: docker-compose file to build proto files
+
+version: '3.3'
+
+services:
+    protos-server:
+        build:
+            context: ./
+            dockerfile: ./docker/Dockerfile
+            args:
+                - BASE_IMG=${PROTOS_BASE_IMAGE}
+        image: camonitor-edge:protos-service
+        network_mode: host
+        restart: on-failure
+        ipc: host
+        deploy:
+            replicas: 1
+        environment:
+            - PRJ_HOME=${PRJ_HOME}
+            - PRJ_PATH=${PRJ_PATH}
+        volumes:
+            - ${PRJ_HOME}:${PRJ_PATH}
+        command: /bin/bash -c "
+                    source ~/.bashrc
+                    && source /home/data/scripts/make_proto.sh"

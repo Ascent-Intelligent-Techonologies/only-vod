@@ -1,0 +1,29 @@
+# Project Camonitor
+# Description: docker-compose file for camera API service
+
+version: '3.3'
+
+services:
+    vod-server:
+        build:
+            context: ./
+            dockerfile: ./docker/Dockerfile
+            args:
+                - BASE_IMG=${VOD_BASE_IMAGE}
+        image: camonitor-edge:vod-api
+        network_mode: host
+        restart: on-failure
+        ipc: host
+        deploy:
+            replicas: 1
+        environment:
+            - PRJ_HOME=${PRJ_HOME}
+            - PRJ_PATH=${PRJ_PATH}
+            - SERVER_PORT=${SERVER_PORT}
+            - SERVER_ADDRESS=${SERVER_ADDRESS}
+        volumes:
+            - ${PRJ_HOME}:${PRJ_PATH}
+        command: /bin/bash -c "
+                    source ~/.bashrc
+                    && source /home/data/env.sh
+                    && source /home/data/scripts/run_server.sh"

@@ -1,0 +1,81 @@
+//============================================================================
+// Name        : videosave_api_base.proto
+// Description : API to interact with VideoSave Module
+// Author      : Akshay Gupta
+//============================================================================
+
+syntax = "proto3";
+
+package VideoSaveService;
+
+service VideoSaveService {
+    rpc HealthCheck (HealthCheckMessage) returns (HealthCheckResult) {
+    }
+    rpc VideoSave (VideoSaveMessage) returns (VideoSaveResult) {
+    }
+    rpc StopVideoSave (VideoSaveMessage) returns (VideoSaveResult) {
+    }
+    rpc GetFrame (GetFrameMessage) returns (S3PathMessage){    
+    }
+    rpc GetAlert (GetAlertMessage) returns (GetAlertResponse){
+    }
+}
+
+enum DType {
+    UINT8 = 0;
+    UINT16 = 1;
+    FLOAT32 = 2;
+    FLOAT64 = 3;
+}
+
+message HealthCheckMessage{
+    repeated RtspUrlMessage rtsp_urls = 1;
+}
+
+message GetAlertMessage{
+    string rtsp_url = 1;
+    string alert_timestamp = 2;
+    string alert_type = 3;
+    string user_comment = 4;
+}
+
+message GetAlertResponse{
+    bool success = 1;
+    string status_message = 2;
+}
+
+message S3PathMessage{
+    bool success = 1;
+    string status_message = 2;
+    string s3_path = 3;
+}
+
+message RtspUrlMessage{
+    string rtsp_url = 1;
+}
+
+message VideoSaveMessage{
+    repeated RtspUrlMessage rtsp_urls = 1;
+}
+
+message GetFrameMessage{
+    string rtsp_url = 1;
+    string device_id = 2;
+    string camera_id = 3;
+}
+
+message RTSPFeedHealthCheck{
+    bool status_flag = 1;
+    string status_message = 2;
+}
+
+message HealthCheckResult{
+    bool success = 1;
+    string status_message = 2; 
+    repeated RTSPFeedHealthCheck feeds = 3; // Each feed will have a separate health check
+}
+
+message VideoSaveResult{
+    bool success = 1;
+    string status_message = 2; 
+}

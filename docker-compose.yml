@@ -1,0 +1,90 @@
+# Project Camonitor
+# Description: docker-compose file to orchestrate all modules
+
+version: '3.3'
+
+services:
+    vod-server:
+        build:
+            context: ./vod
+            dockerfile: ./docker/Dockerfile
+            args:
+                - BASE_IMG=${VOD_BASE_IMAGE}
+        image: camonitor-edge:vod-api
+        network_mode: host
+        restart: on-failure
+        ipc: host
+        deploy:
+            replicas: 1
+        environment:
+            - PRJ_HOME=${VODSERVICE_HOME}
+            - PRJ_PATH=${VODSERVICE_PATH}
+            - SERVER_PORT=${VODSERVICE_PORT}
+            - SERVER_ADDRESS=${VODSERVICE_ADDRESS}
+            - ACCESSKEY=${ACCESSKEY}
+            - SECRETKEY=${SECRETKEY}
+            - AWSREGION=${AWSREGION}
+        volumes:
+            - ${VODSERVICE_HOME}:${VODSERVICE_PATH}
+        command: /bin/bash -c "
+                    source ~/.bashrc
+                    && source /home/data/scripts/run_server.sh"
+    
+    edge-fastapi:
+        build:
+            context: ./edgefastapi
+            dockerfile: ./Dockerfile
+        image: camonitor-edge:edge-fast-api
+        network_mode: host
+        deploy:
+            replicas: 1
+        environment:
+            - ACCESSKEY=${ACCESSKEY}
+            - SECRETKEY=${SECRETKEY}
+            - AWSREGION=${AWSREGION}
+            - SERVER_PORT=${EDGEADMIN_PORT}
+            - VOD_SERVER_PORT=${VODSERVICE_PORT}
+            - ALERT_SERVER_PORT=60005
+            - SERVER_ADDRESS=${EDGEFASTAPI_ADDRESS}
+            - EDGEFASTAPI_PORT=${EDGEFASTAPI_PORT}
+        command: python3 src/main.py
+        volumes:
+            - ${EDGEFASTAPI_HOME}:${EDGEFASTAPI_PATH}
+            - /var/run/docker.sock:/var/run/docker.sock
+        depends_on:
+            - vod-server
+            - edgeadmin-server
+    edgeadmin-server:
+        build:
+            context: ./edgeadmin
+            dockerfile: ./docker/Dockerfile
+            args:
+                - BASE_IMG=${EDGEADMIN_BASE_IMAGE}
+        image: camonitor-edge:edgeadmin-api
+        network_mode: host
+        restart: on-failure
+        ipc: host
+        deploy:
+            replicas: 1
+        environment:
+            - PRJ_HOME=${EDGEADMIN_HOME}
+            - PRJ_PATH=${EDGEAMDIN_PATH}
+            - SERVER_PORT=${EDGEADMIN_PORT}
+            - SERVER_ADDRESS=${EDGEADMIN_ADDRESS}
+            - SQL_BASE_URL=${SQL_BASE_URL}
+        volumes:
+            - ${EDGEADMIN_HOME}:${EDGEAMDIN_PATH}
+        command: /bin/bash -c "
+                    source ~/.bashrc
+                    && source /home/data/scripts/run_server.sh"
+    custom-create-server:
+        build:
+            context: ./edgefastapi
+            dockerfile: ./RTSPDockerfile
+            args:
+                - BASE_IMG=${CUSTOM_RTSP_BASE_IMAGE}
+        image: camonitor-edge:custom-rtsp
+        restart: on-failure
+        ipc: host
+        deploy:
+            replicas: 1
