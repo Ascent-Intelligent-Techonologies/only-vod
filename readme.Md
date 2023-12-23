@@ -10,7 +10,7 @@
   - [files and details](#files-and-details)
   - [setting up webcam as a cctv camera with rtsp:](#setting-up-webcam-as-a-cctv-camera-with-rtsp)
   - [Basic Debugging checks.](#basic-debugging-checks)
-    - [](#)
+    - [No media found in kinesis video stream](#no-media-found-in-kinesis-video-stream)
       - [references:](#references)
 
 
@@ -64,7 +64,13 @@
 
 ## Basic Debugging checks.
 
-### 
+### No media found in kinesis video stream
+![](./docs/Screenshot1.png)
+1. check if the rtsp stream is working using vlc player.
+2. check if the camera registration was accurate.(check the stream name, url).
+3. check the logs of custom rtsp container
+4. check the logs of vod container.
+5. If all look fine, ssh into the vod container, run the gstreamer command manually to check if the gstreamer or the kinesis video stream is causing any issue.
 
 #### references:
 https://kaustavmukherjee-66179.medium.com/convert-any-webcam-into-ipcam-in-2-minutes-using-rtsp-server-and-ffmpeg-a27414f08af5
