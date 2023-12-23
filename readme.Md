@@ -37,7 +37,10 @@
 3. To stop the running software run the following command in the `./` folder.
     `docker compose down`
 
-4. For fresh setup always delete `cameras.json` and `config.json` and then do docker compose up.
+4. To stop any dangling containers we can use the following command.
+   `docker stop "ImageId"`
+
+5. For fresh setup always delete `cameras.json` and `config.json` and then do docker compose up.
 
 ## Registering a new camera
 
@@ -57,7 +60,7 @@
 
 1. `wget https://github.com/aler9/rtsp-simple-server/releases/download/v0.16.0/rtsp-simple-server_v0.16.0_linux_amd64.tar.gz` download rtsp server 
 2. `tar -xzvf rtsp-simple-server_v0.16.0_linux_amd64.tar.gz` unzip
-3. `RTSP_RTSPADDRESS=192.168.XXX.XXX:8554 ./rtsp-simple-server` running the server on the address and port. give machine ip
+3. `RTSP_RTSPADDRESS=192.168.XXX.XXX:8554 ./rtsp-simple-server` running the server on the address and port. give machine ip. run this command in the same folder where the unzip command is executed.
 4. `sudo apt-get install v4l-utils` v41 utils
 5. `sudo v4l2-ctl — list-devices` list devices
 6. `sudo ffmpeg -f v4l2 -framerate 25 -video_size 640x480 -i /dev/video0 -c:v libx264 -f rtsp -rtsp_transport tcp rtsp://192.168.XXX.XXX:8554/mystream` push video frames to the rtsp server at /mystream endpoint. Note to make sure you have libx264 -which gives h264 encoding equivalent in cctv.
