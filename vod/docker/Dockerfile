@@ -59,4 +59,6 @@ RUN apt-get update \
     && apt-get install -y python3-pip \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* \
-    && python3.9 -m pip -q install --no-cache-dir -r /home/tools/requirements.txt
+    && python3.9 -m pip -q install -r /home/tools/requirements.txt
+
+RUN python3.9 -m pip install numpy==1.26.4 opencv-python==4.10.0.84 --no-deps
